@@ -3,11 +3,15 @@ from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 
-metadata = MetaData(
-    naming_convention={
-        "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    }
-)
+convention = {
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s",
+}
+
+metadata = MetaData(naming_convention=convention)
 
 db = SQLAlchemy(metadata=metadata)
 
@@ -19,7 +23,7 @@ class Attendee(db.Model, SerializerMixin):
     name = db.Column(db.String)
 
     rsvps = db.Relationship(
-        "RSVP", back_populates="event", cascade="all, delete-orphan"
+        "RSVP", back_populates="attendee", cascade="all, delete-orphan"
     )
     event = association_proxy("rsvps", "event")
 
@@ -42,7 +46,7 @@ class Event(db.Model, SerializerMixin):
     attendee = association_proxy("rsvps", "attendee")
 
     serialize_rules = ("-rsvps",)
-    
+
     def __repr__(self):
         return f"<Event {self.id}: {self.name}, {self.date}>"
 
@@ -52,7 +56,7 @@ class RSVP(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     attendee_id = db.Column(db.Integer, db.ForeignKey("attendees.id"))
-    event_id = db.column(db.Integer, db.ForeignKey("events.id"))
+    event_id = db.Column(db.Integer, db.ForeignKey("events.id"))
 
     attendee = db.Relationship("Attendee", back_populates="rsvps")
     event = db.Relationship("Event", back_populates="rsvps")

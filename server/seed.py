@@ -10,8 +10,8 @@ fake = Faker()
 
 def create_events():
     events = []
-    for _ in range(10):
-        e = Event(name=fake.sentence(), time=rc(range(24)))
+    for _ in range(15):
+        e = Event(name=fake.sentence(), date=fake.date_time())
         events.append(e)
 
     return events
@@ -19,7 +19,7 @@ def create_events():
 
 def create_attendees():
     attendees = []
-    for _ in range(5):
+    for _ in range(10):
         a = Attendee(name=fake.name())
         attendees.append(a)
 
@@ -31,7 +31,7 @@ def create_rsvps(events, attendees):
     for _ in range(20):
         r = RSVP(
             attendee_id=rc([attendee.id for attendee in attendees]),
-            events_id=rc([event.id for event in events]),
+            event_id=rc([event.id for event in events]),
         )
         rsvps.append(r)
 
