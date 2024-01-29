@@ -1,4 +1,4 @@
-from flask import Flask, make_response, jsonify
+from flask import Flask, make_response, request, jsonify
 from flask_migrate import Migrate
 
 from models import db, Attendee, Event, RSVP
