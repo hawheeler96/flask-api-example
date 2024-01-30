@@ -5,7 +5,7 @@ Hello! If you are reading this, you have come across my sample app used to help 
 Please fork the repo before cloning it to ensure others can access it at its base state. 
 
 # Prerequisites 
-To run this application, you will need Python installed on your system.
+To run this application, you will need Python and Flask installed on your system.
 
 # Installation 
 1. Fork the repo 
